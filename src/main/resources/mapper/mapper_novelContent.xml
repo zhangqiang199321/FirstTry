@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.xiaoshuo.dao.NovelContentDao">
+    <sql id="novel_content">
+         id,novel_id,chapter,chapter_id,chapter_name,content,create_time,update_time
+    </sql>
+    <select id = "selectList" resultType = "com.example.xiaoshuo.entity.NovelContent">
+        select 
+        <include refid="novel_content"/>
+        from novel_content
+        <where>
+            <if test="novelId !=null and novelId !=''">
+                novel_id=#{novelId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <select id = "selectOne" resultType = "com.example.xiaoshuo.entity.NovelContent">
+        select
+        <include refid="novel_content"/>
+        from novel_content
+        <where>
+            <if test="novelId !=null and novelId !=''">
+                novel_id=#{novelId,jdbcType=INTEGER}
+            </if>
+            <if test="chapterId !=null and chapterId !=''">
+                and chapter_id=#{chapterId,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <insert id="insertOne" parameterType="com.example.xiaoshuo.entity.NovelContent">
+        insert into novel_content
+        <trim prefix="(" suffix=")">
+            <include refid="novel_content"></include>
+        </trim>
+        values
+        <trim prefix="(" suffix=")">
+                #{novelContent.id},
+                #{novelContent.novelId},
+                #{novelContent.chapter},
+                #{novelContent.chapterId}
+                #{novelContent.chapterName},
+                #{novelContent.content},
+                #{novelContent.createTime},
+                #{novelContent.updateTime}
+        </trim>
+    </insert>
+</mapper>
+
+
+

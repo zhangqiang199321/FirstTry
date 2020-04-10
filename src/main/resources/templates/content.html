@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="lib/vue.js"></script>
+    <link rel="stylesheet" href="lib/bootstrap.css">
+    <script src="https://cdn.bootcss.com/vue-resource/1.5.1/vue-resource.js"></script>
+</head>
+<body>
+<div id="content">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">小说网</h3>
+        </div>
+        <div class="text-center">
+            <h1 >{{novelName}}</h1>
+            <h2 >{{ chapter }}{{ chapterName }}</h2>
+        </div>
+        <div class="panel-body form-inline text-center">
+            <input type="button" value="上一章" @click="before">
+            <input type="button" value="目录" @click="catalogue">
+            <input type="button" value="下一章" @Click="next">
+        </div>
+        <div class="text-center">
+            <h3 v-for="item in list">
+                <a :href="now(item.novelId,item.chapterId)">{{item.chapter}}{{ item.chapterName }}</a>
+            </h3>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    var con = new Vue({
+        el:"#content",
+        data:{
+            novelName:'星辰变',
+            chapter:'1',
+            chapterId:'1',
+            chapterName:'小孩',
+            content:'获取小说',
+            list:'',
+        },
+        methods:{
+            before(){
+                this.$http.get('/novel/proContent').then((result) => {
+                    this.chapter = result.data.chapter,
+                    this.chapterName = result.data.chapterName
+                    this.content = result.data.content
+            },(result) => {
+                console.log('获取小说失败')
+            })
+            },
+            catalogue() {
+                this.$http.post('/novel/contentByName',{novelName:'星辰变'},{emulateJSON:true}).then((result) => {
+                    this.list = result.body.data
+                }, (result) => {
+                    console.log('获取小说失败')
+                })
+            },
+            now(itemNovelId,itemChapterId) {
+                this.$http.post('/novel/contentByNovelContent',{novelId:itemNovelId,chapterId:itemChapterId},{emulateJSON:true}).then((result) => {
+                    this.chapter = result.data.data.chapter,
+                    this.chapterName = result.data.data.chapterName
+                }, (result) => {
+                    console.log('获取小说失败')
+                })
+            },
+            next() {
+                this.$http.get('/novel/nextContent',{params:{novelName:this.novelName,chapterId:this.chapterName}}).then((result) => {
+                    console.log(result.data.data)
+                    this.chapter = result.data.data.chapter,
+                    this.chapterName = result.data.data.chapterName,
+                    this.content = result.data.data.content
+                }, (result) => {
+                    console.log('获取小说失败')
+                })
+            },
+        }
+    })
+</script>
+</html>

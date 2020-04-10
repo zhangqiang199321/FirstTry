@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.xiaoshuo.dao.UserInfoDao">
+    <sql id="user_info">
+         id,user_id,pass_word,user_name,mark,del_flag,create_time,update_time
+    </sql>
+    <select id = "selectOne" resultType = "com.example.xiaoshuo.entity.UserInfo">
+        select 
+        <include refid="user_info"/>
+        from user_info
+        <where>
+            <if test="userId !=null and userId !=''">
+                user_id=#{userId}
+            </if>
+        </where>
+    </select>
+    <insert id="insertOne" parameterType="com.example.xiaoshuo.entity.UserInfo">
+        insert into user_info
+        <trim prefix="(" suffix=")">
+            <include refid="user_info"></include>
+        </trim>
+        values
+        <trim prefix="(" suffix=")">
+                #{userInfo.id},
+                #{userInfo.userId},
+                #{userInfo.passWord},
+                #{userInfo.userName},
+                #{userInfo.gender},
+                #{userInfo.birthday},
+                #{userInfo.mark},
+                #{userInfo.phoneNumber},
+                #{userInfo.createTime},
+                #{userInfo.updateTime}
+        </trim>
+    </insert>
+</mapper>
+
+
+
