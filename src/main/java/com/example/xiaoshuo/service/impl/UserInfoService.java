@@ -6,6 +6,9 @@ import com.example.xiaoshuo.service.IUserInfoService;
 import com.example.xiaoshuo.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
 /**
  * @author zhaomeng
  * @date 2020.1.3
@@ -13,7 +16,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserInfoService implements IUserInfoService {
-    @Autowired
+    @Resource
     private UserInfoDao userInfoDao;
 
     @Override
